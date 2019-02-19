@@ -1,0 +1,44 @@
+.myBtnClass {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.myBtnClass:hover {
+	background-color: white;
+	color: black;
+}
+
+body {
+	font: 14px "Century Gothic", Futura, sans-serif;
+	margin: 20px;
+	background-color: #a3ceff;
+}
+
+#settingsTable {
+  border: 1;
+  border-color: black;
+}
+
+#settingsTable td, #settingsTable th {
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+#settingsTable tr:nth-child(even){background-color: #f2f2f2;}
+#settingsTable tr:nth-child(odd){background-color: #c2d3ef;}
+
+#settingsTable tr:hover {background-color: #ddd;}
+
+#settingsTable th {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: left;
+  background-color: #0a244f;
+  color: white;
+}
