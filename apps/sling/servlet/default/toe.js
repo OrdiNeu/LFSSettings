@@ -99,9 +99,19 @@ class Game extends React.Component {
       const desc = move ?
         'Go to move #' + move :
         'Go to game start';
+      var buttonStyle;
+      if (move === 0) {
+        buttonStyle = {color: "black", fontWeight: 'bold'};
+      }
+      else if ((move % 2) === 0) {
+        buttonStyle = {color: "green", fontWeight: 'bold'};
+      }
+      else {
+        buttonStyle = {color: "blue", fontWeight: 'bold'};
+      }
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.jumpTo(move)} style={buttonStyle}>{desc}</button>
         </li>
       );
     });

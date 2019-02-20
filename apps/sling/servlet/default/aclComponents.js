@@ -1,3 +1,66 @@
+class TitleBar extends React.Component {
+  render() {
+    return (
+        <h1>Manage Access Control For: { currentNodePath } </h1>
+      )
+  }
+}
+
+class UserEntryForm extends React.Component {
+  render() {
+    var actionPath = contextPath + currentNodePath + ".ace.html";
+    return (
+       <fieldset>
+          <legend>Add an entry for a user or group</legend>
+          <form method="GET" action={ actionPath }>
+             <label htmlFor="addpid">Principal Name:</label> 
+             <input id="addpid" type="text" name="pid" placeholder="" />
+             <input type="submit" placeholder="Add"/>
+          </form>
+       </fieldset>
+    )
+  }
+}
+
+class AccessControlEntries extends React.Component {
+  render() {
+    var actionPath = contextPath + currentNodePath + ".deleteAce.html";
+    return (
+     <fieldset>
+        <legend>Current access control entries</legend>
+
+        <form method="POST" action={ actionPath } >
+           <input type="hidden" name=":redirect" placeholder={ contextPath } />
+           
+           <table width="100%">
+              <thead>
+                 <tr>
+                    <th align="left" width="60%">Principal</th>
+                    <th align="center" width="25%">Privileges</th>
+                    <th align="center" width="15%">
+                      { canModifyClient ? 'Remove' : '' } 
+                    </th>
+                 </tr>
+              </thead>
+
+              <tfoot>
+                 <tr>
+                    <td colSpan="2"></td>
+                    <td align="center"><input type="submit" value="Remove Selected" style={{color:'red'}}/></td>
+                 </tr>
+              </tfoot>
+           </table>
+        </form>
+     </fieldset>
+      )
+  }
+}
+
+
+
+/////////////////////////////////////////////////////////////////////
+// Ignore below
+/////////////////////////////////////////////////////////////////////
 class SomeBtn extends React.Component {
   render() {
     return (
@@ -120,14 +183,29 @@ const PRODUCTS = [
   {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
 ];
  
+// ReactDOM.render(
+//   <FilterableProductTable products={PRODUCTS} />,
+//   document.getElementById('intermediaryTableContainer')
+// );
+
+// ReactDOM.render(
+//   <SomeBtn />,
+//   document.getElementById('someBtnTest')
+// );
+
 ReactDOM.render(
-  <FilterableProductTable products={PRODUCTS} />,
-  document.getElementById('intermediaryTableContainer')
+  <TitleBar />,
+  document.getElementById('title-test')
 );
 
 ReactDOM.render(
-  <SomeBtn />,
-  document.getElementById('someBtnTest')
+  <UserEntryForm />,
+  document.getElementById('user-entry-form')
+);
+
+ReactDOM.render(
+  <AccessControlEntries />,
+  document.getElementById('access-control-entries')
 );
 
 /*
