@@ -83,6 +83,12 @@
    <div> Here is reusing the Game component </div>
    <div class="games">GameHere</div>
 
+   <div> Live table here </div>
+   <div id=table-test></div>
+
+   <div>Button is here </div>
+   <div id=button-test></div>
+
   <!-- Load React. -->
   <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
   <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
@@ -102,6 +108,16 @@
   <script src="https://unpkg.com/@material-ui/core/umd/material-ui.production.min.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 
+  <!-- Proptypes development version -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
+
+  <!-- ClassNames development version -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/classnames/2.2.5/index.js"></script>
+
+  <script type="text/babel" src="/../../apps/sling/servlet/default/userTable.js">
+  </script> 
+  <script type="text/babel" src="/../../apps/sling/servlet/default/buttonTest.js">
+  </script> 
 
 </body>
 </html>
