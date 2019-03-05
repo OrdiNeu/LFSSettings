@@ -61,9 +61,9 @@ class AccessControlEntries extends React.Component {
     var actionPath = contextPath + currentNodePath + ".deleteAce.html";
 
     let nameCount = arrayOfNamesClient.length;
-    for (var i = 0; i < 1; ++i) {
-      arrayOfEntries.push(
-        <EntriesList principalName={arrayOfNamesClient[i]} 
+    for (var i = 0; i < nameCount; ++i) {
+      arrayOfEntries.push( // Note that key = i is a bad key, need unique row key
+        <EntriesList key={i} principalName={arrayOfNamesClient[i]} 
         privilageDisplayname={arrayOfPrivilageDisplayNamesClient[i]} />)
     }
 
@@ -119,7 +119,7 @@ class EntriesList extends React.Component {
             </td>
 
             <td align="center" width="15%">
-                <input type="checkbox" name=":applyTo" value="asdf" />
+                <input type="checkbox" name=":applyTo" value={this.props.principalName} />
             </td>
           </tr>
         )

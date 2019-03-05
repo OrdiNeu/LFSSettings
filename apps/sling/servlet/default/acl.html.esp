@@ -98,6 +98,11 @@
   <script type="text/babel" src="/../../apps/sling/servlet/default/aclComponents.js">
   </script> 
 
+  <!-- Material UI and corresponding stylesheet -->
+  <script src="https://unpkg.com/@material-ui/core/umd/material-ui.production.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+
+
 </body>
 </html>
 <%   
