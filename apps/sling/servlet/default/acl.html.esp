@@ -28,11 +28,21 @@
       var entrySet = accessMap.entrySet();
       var iterator = entrySet.iterator();
 
+      var arrayOfNames = [];
+      var arrayOfPrivilageDisplayNames = [];
+
       while (iterator.hasNext()) {
         var entry = iterator.next();
         var principal = entry.getKey();
         var accessrights = entry.getValue();
+
+        arrayOfNames.push(String(principal.getName()));
+        arrayOfPrivilageDisplayNames.push(String(accessrights.getPrivilegeSetDisplayName(request.locale)));
       }
+   //console.log(stringArrayTest);
+
+   arrayOfNames = JSON.stringify(arrayOfNames);
+   arrayOfPrivilageDisplayNames = JSON.stringify(arrayOfPrivilageDisplayNames);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" lang="en"
@@ -49,28 +59,22 @@
 <body>
 
 <!-- Global Vars for Client, should turn into server side render later -->
+<!-- These paths are used as strings to display directly -->
 <script>
    var currentNodePath = "<%=currentNode.path%>";
    var contextPath = "<%=request.contextPath%>";
    var canModifyClient = <%= canModify %>;
 
-    //var iteratorClient = <%= iterator %>;
+   var arrayOfNamesClient = <%= arrayOfNames %>; // TODO: Breaks with more than one
+   var arrayOfPrivilageDisplayNamesClient = <%= arrayOfPrivilageDisplayNames %>;
+   console.log(arrayOfNamesClient);
+   console.log(arrayOfPrivilageDisplayNamesClient);
+
 </script>
 
 <h2> Hi there. The below should be React components </h2>
-<%= <h1> This should be server sided only </h1> %>
+<%= <h1> The following is being client rendered </h1> %>
 
-<!--
-   <div id="title-test"> Mange Access Control ... should appear here </div>
-
-   <!-- <h1>Manage Access Control For: <%=currentNode.path%></h1> -//->
-
-   <% if (canModify) { %>
-      <div id="user-entry-form"> </div>
-   <% } %>
-
-   <div id="access-control-entries"> </div>
--->
   <div id="main-container"> </div>
 
    <div> Here is a Game component </div>

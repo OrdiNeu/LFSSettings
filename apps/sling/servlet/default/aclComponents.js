@@ -55,8 +55,18 @@ class UserEntryForm extends React.Component {
 }
 
 class AccessControlEntries extends React.Component {
+  
   render() {
+    var arrayOfEntries = [];
     var actionPath = contextPath + currentNodePath + ".deleteAce.html";
+
+    let nameCount = arrayOfNamesClient.length;
+    for (var i = 0; i < 1; ++i) {
+      arrayOfEntries.push(
+        <EntriesList principalName={arrayOfNamesClient[i]} 
+        privilageDisplayname={arrayOfPrivilageDisplayNamesClient[i]} />)
+    }
+
     return (
      <fieldset>
         <legend>Current access control entries</legend>
@@ -75,6 +85,10 @@ class AccessControlEntries extends React.Component {
                  </tr>
               </thead>
 
+              <tbody>
+              {arrayOfEntries}
+              </tbody>
+
               <tfoot>
                  <tr>
                     <td colSpan="2"></td>
@@ -85,6 +99,47 @@ class AccessControlEntries extends React.Component {
         </form>
      </fieldset>
       )
+  }
+}
+
+class EntriesList extends React.Component {
+
+  render () {
+    if (canModifyClient) {
+      return (
+          <tr>
+            <td align="left" width="60%" >
+              <a href={contextPath + currentNodePath + ".ace.html?pid=" + this.props.principalName}>
+                 {this.props.principalName}
+              </a>
+            </td>
+
+            <td align="center" width="25%" >
+               {this.props.privilageDisplayName}
+            </td>
+
+            <td align="center" width="15%">
+                <input type="checkbox" name=":applyTo" value="asdf" />
+            </td>
+          </tr>
+        )
+    } else {
+      return (
+        <tr>
+          <td align="left" width="60%" >
+            {this.props.principalName}
+          </td>
+
+          <td align="center" width="25%" >
+             {this.props.privilageDisplayName}
+          </td>
+
+          <td align="center" width="15%">
+          </td>
+
+        </tr>
+      )
+    }
   }
 }
 
