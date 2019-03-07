@@ -35,6 +35,29 @@
             }
          }
       }
+
+      if (isValidPrincipal) {
+         //principal is valid
+         var accessRights = privilegesInfo.getDeclaredAccessRightsForPrincipal(currentNode, principalId);
+         var granted = accessRights.getGranted();
+         var denied = accessRights.getDenied();
+         var supported = privilegesInfo.getSupportedPrivileges(currentNode);
+         var canModify = privilegesInfo.canModifyAccessControl(currentNode);
+
+         var permissionNames = [];
+         var grantedPermission = [];
+         var deniedPermission = [];
+
+         for (i=0; i < supported.length; i++) {
+            var p = supported[i];
+            permissionNames.push(String(p.getName()));
+            grantedPermission.push(granted.contains(p));
+            deniedPermission.push(denied.contains(p));
+         }
+         permissionNames = JSON.stringify(permissionNames);
+         grantedPermission = JSON.stringify(grantedPermission);
+         deniedPermission = JSON.stringify(deniedPermission);
+      }
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" lang="en"
@@ -64,6 +87,26 @@
    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/../../apps/sling/servlet/default/btnTest.css">
 </head>
 <body>
+
+   <!-- Global Vars for Client, should turn into server side render later -->
+   <!-- These paths are used as strings to display directly -->
+   <script>
+      var currentNodePath = "<%=currentNode.path%>";
+      var contextPath = "<%=request.contextPath%>";
+      var canModifyClient = <%= canModify %>;
+      var principalIdClient = "<%= principalId %>";
+
+      var permissionNamesClient = <%= permissionNames %>;
+      var grantedPermissionClient = <%= grantedPermission %>;
+      var deniedPermissionClient = <%= deniedPermission %>;
+
+      console.log("Permission Names: " + permissionNamesClient);
+      console.log("Granted bools: " + grantedPermissionClient);
+      console.log("Denied Bools: " + deniedPermissionClient);
+
+   </script>
+
+
    <%
       if (!isValidPrincipal) {
    %>
@@ -79,50 +122,23 @@
          var supported = privilegesInfo.getSupportedPrivileges(currentNode);
          var canModify = privilegesInfo.canModifyAccessControl(currentNode);
    %>
-
-      <h1>Modify Access Control Entry For: <%=principalId%></h1>
-   
-      <form method="POST" action="<%=request.contextPath%><%=currentNode.path%>.modifyAce.html" >
-         <input type="hidden" name=":redirect" value="<%=request.contextPath%><%=currentNode.path%>.acl.html" />
-         <input type="hidden" name="principalId" value="<%=principalId%>" />
-      
-         <table width="100%" id="settingsTable">
-            <thead>
-               <tr>
-                  <th align="left" width="55%">Privilege</th>
-                  <th align="center" width="15%">Ignored</th>
-                  <th align="center" width="15%">Granted</th>
-                  <th align="center" width="15%">Denied</th>
-               </tr>
-            </thead>
-            <tbody>
-            <%
-               for (i=0; i < supported.length; i++) {
-                  var p = supported[i];
-            %>
-            <tr>
-               <td align="left" width="55%"><%=p.getName()%></td>
-               <td align="center" width="15%"><input type="radio" name="privilege@<%=p.getName()%>" value="none" <%=granted.contains(p) || denied.contains(p) ? "" : "checked"%> /></td>
-               <td align="center" width="15%"><input type="radio" name="privilege@<%=p.getName()%>" value="granted" <%=granted.contains(p) ? "checked" : ""%> /></td>
-               <td align="center" width="15%"><input type="radio" name="privilege@<%=p.getName()%>" value="denied" <%=denied.contains(p) ? "checked" : ""%> /></td>
-            </tr>      
-            <%      
-               }
-            %>
-            </tbody>
-            <tfoot>
-               <tr>
-                  <td colspan="3"></td>
-                  <td align="center" width="15%">
-                     <button accesskey="a" id="applyButton" class="form-button myBtnClass" type="submit">Apply</button>
-                  </td>
-               </tr>
-            </tfoot>
-         </table>
-      </form>
+      <div id='permission-table-container'> Permissions table here</div>
    <%
       } //end-if isValidPrincipal
-   %>      
+   %>
+
+  <!-- Load React. -->
+  <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+  <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+
+  <!-- Load Babel transpiler to allow for JSX when writing React components. Without this, we can only write in plain JS -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+   <!-- Load our React component. -->
+   <!-- Note the type="text/babel" indicates that this uses JSX -->
+  <script type="text/babel" src="<%= request.getContextPath() %>/../../apps/sling/servlet/default/aceComponents.js"></script>
+
 </body>
 </html>
 <%
