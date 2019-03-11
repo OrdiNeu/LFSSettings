@@ -100,9 +100,9 @@
       var grantedPermissionClient = <%= grantedPermission %>;
       var deniedPermissionClient = <%= deniedPermission %>;
 
-      console.log("Permission Names: " + permissionNamesClient);
-      console.log("Granted bools: " + grantedPermissionClient);
-      console.log("Denied Bools: " + deniedPermissionClient);
+      // console.log("Permission Names: " + permissionNamesClient);
+      // console.log("Granted bools: " + grantedPermissionClient);
+      // console.log("Denied Bools: " + deniedPermissionClient);
 
    </script>
 
@@ -115,12 +115,6 @@
       </ul>
    <%
       } else  {
-         //principal is valid
-         var accessRights = privilegesInfo.getDeclaredAccessRightsForPrincipal(currentNode, principalId);
-         var granted = accessRights.getGranted();
-         var denied = accessRights.getDenied();
-         var supported = privilegesInfo.getSupportedPrivileges(currentNode);
-         var canModify = privilegesInfo.canModifyAccessControl(currentNode);
    %>
       <div id='permission-table-container'> Permissions table here</div>
    <%

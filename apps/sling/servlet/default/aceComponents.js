@@ -11,9 +11,10 @@ class Form extends React.Component {
 		var arrayOfPermissions = [];
 		let permissionsCount = permissionNamesClient.length;
 		for (var i = 0; i < permissionsCount; ++i) {
-			arrayOfPermissions.push(<FormRow key={i} grantedBool={grantedPermissionClient[i]} deniedBool={deniedPermissionClient[i]} permissionName={permissionNamesClient[i]} />);
+			// Add a row for each property
+			arrayOfPermissions.push(<FormRow key={permissionNamesClient[i]} grantedBool={grantedPermissionClient[i]} deniedBool={deniedPermissionClient[i]} permissionName={permissionNamesClient[i]} />);
 			
-			console.log("Passing granted, denied, permission: " + grantedPermissionClient[i] + deniedPermissionClient[i] + permissionNamesClient[i]);
+			// console.log("Passing granted, denied, permission: " + grantedPermissionClient[i] + deniedPermissionClient[i] + permissionNamesClient[i]);
 		}
 
 		return (
@@ -54,50 +55,42 @@ class FormRow extends React.Component {
 	constructor (props) {
 		super (props);
 
-		var initialPosition = 'left';
+		var initialPosition = 'none';
 
 		if (!(props.grantedBool || props.deniedBool)) {
-			initialPosition='left';
+			initialPosition='none';
 		}
 		if (props.grantedBool) {
-			initialPosition='center';
+			initialPosition='granted';
 		}
 		if (props.deniedBool) {
-			initialPosition='right';
+			initialPosition='denied';
 		}
 
 		this.state = { // State isn't updated immediately?
 			position: initialPosition, // Granted, Denied, or Ignored
-			// isLeftCheckedState: !(props.grantedBool || props.deniedBool),
-			// isCenterCheckedState: props.grantedBool,
-			// isRightCheckedState: props.deniedBool
 		};
 
-		console.log("Debug position: " + initialPosition);
+		// console.log("Debug position: " + initialPosition);
 
 		this.handleChange = this.handleChange.bind(this);
 	}
 
 	handleChange (e) {
-		// this.setState({
-		// 	// Mutate the array
-		// 	// isLeftCheckedState: true;
-		// 	// isMiddleCheckedState: false;
-		// 	// isRightCheckedState: false;
-		// });
+		this.setState({
+			position: e.currentTarget.value
+		});
+
 	}
 
 	render () {
-		// var isLeftChecked = (this.props.grantedBool || this.props.deniedBool) ? "" : "checked";
-		// var isCenterChecked = this.props.grantedBool ? "checked" : "";
-		// var isRightChecked = this.props.deniedBool ? "checked" : "";
 		return (
 			<tr>
                <td align="left" width="55%">{this.props.permissionName}</td>
                <td align="center" width="15%">
-               	<input type="radio" name={"privilege@" + this.props.permissionName} value="none" checked={this.state.position === 'left'} onChange={this.handleChange()} /></td>
-               <td align="center" width="15%"><input type="radio" name={"privilege@" + this.props.permissionName} value="granted" checked={this.state.position === 'center'} onChange={this.handleChange()} /></td>
-               <td align="center" width="15%"><input type="radio" name={"privilege@" + this.props.permissionName} value="denied" checked={this.state.position === 'right'} onChange={this.handleChange()} /></td>
+               	<input type="radio" name={"privilege@" + this.props.permissionName} value="none" checked={this.state.position === 'none'} onChange={event => this.handleChange(event)} /></td>
+               <td align="center" width="15%"><input type="radio" name={"privilege@" + this.props.permissionName} value="granted" checked={this.state.position === 'granted'} onChange={event => this.handleChange(event)} /></td>
+               <td align="center" width="15%"><input type="radio" name={"privilege@" + this.props.permissionName} value="denied" checked={this.state.position === 'denied'} onChange={event => this.handleChange(event)} /></td>
             </tr>     
 		);
 	}
