@@ -68,12 +68,12 @@ class FormRow extends React.Component {
 		}
 
 		this.state = { // State isn't updated immediately?
-			position: initialPosition, // Granted, Denied, or Ignored
+			position: initialPosition // Granted, Denied, or Ignored
 		};
 
 		// console.log("Debug position: " + initialPosition);
 
-		this.handleChange = this.handleChange.bind(this);
+		//this.handleChange = this.handleChange.bind(this);
 	}
 
 	handleChange (e) {
@@ -96,12 +96,72 @@ class FormRow extends React.Component {
 	}
 }
 
+class DropdownForm extends React.Component {
+	constructor () {
+		super();
+
+		this.state = {
+			permission: 'none'
+		};
+	}
+
+	handleChange(e) {
+		this.setState({
+			permission: e.currentTarget.value
+		});
+		console.log("change state of dropdown: ");
+	}
+
+	render () {
+		var createItem = function(anOption) {
+			return <option key={anOption} value={anOption} onChange={event => this.handleChange(event)} >{anOption}</option>
+		};
+
+		return (
+			<div> Second View here:
+				<form method="POST" action={contextPath + currentNodePath + ".modifyAce.html"} >
+         		<input type="hidden" name=":redirect" value={contextPath + currentNodePath + ".acl.html"} />
+         		<input type="hidden" name="principalId" value={principalIdClient} />
+
+				<select> {permissionNamesClient.map(createItem)} </select>
+
+		         <table width="100%" id="settingsTable">
+		            <thead>
+		               <tr>
+		                  <th align="left" width="55%">Privilege</th>
+		                  <th align="center" width="15%">Ignored</th>
+		                  <th align="center" width="15%">Granted</th>
+		                  <th align="center" width="15%">Denied</th>
+		               </tr>
+		            </thead>
+		            <tbody>
+
+
+
+		            </tbody>
+		            <tfoot>
+		               <tr>
+		                  <td colSpan="3"></td>
+		                  <td align="center" width="15%">
+		                     <button accessKey="a" id="applyButton" className="form-button myBtnClass" type="submit">Apply</button>
+		                  </td>
+		               </tr>
+		            </tfoot>
+		         </table>
+
+			</form>
+			</div>
+		);
+	}
+}
+
 class Main extends React.Component {
 	render () {
 		return (
 			<React.Fragment>
 			<TitleBar />
 			<Form />
+			{ <DropdownForm /> }
 			</React.Fragment>
 		);
 	}

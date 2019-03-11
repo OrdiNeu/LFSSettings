@@ -47,16 +47,35 @@
          var permissionNames = [];
          var grantedPermission = [];
          var deniedPermission = [];
+         var permissionMap = {};
 
          for (i=0; i < supported.length; i++) {
             var p = supported[i];
             permissionNames.push(String(p.getName()));
             grantedPermission.push(granted.contains(p));
             deniedPermission.push(denied.contains(p));
+
+
+            // Permissions Map
+            if (!(granted.contains(p) || denied.contains(p))) {
+               permissionMap[String(p.getName())] = "none";
+            }
+            else if (granted.contains(p)) {
+               permissionMap[String(p.getName())] = "granted";
+            }
+            else if (denied.contains(p)) {
+               permissionMap[String(p.getName())] = "denied";
+            }
+            else {
+               permissionMap[String(p.getName())] = "something is wrong";
+            }
          }
+
          permissionNames = JSON.stringify(permissionNames);
          grantedPermission = JSON.stringify(grantedPermission);
          deniedPermission = JSON.stringify(deniedPermission);
+
+         permissionMap = JSON.stringify(permissionMap);
       }
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -99,6 +118,10 @@
       var permissionNamesClient = <%= permissionNames %>;
       var grantedPermissionClient = <%= grantedPermission %>;
       var deniedPermissionClient = <%= deniedPermission %>;
+
+      var permissionMapClient = <%= permissionMap %>;
+
+      console.log(permissionMapClient);
 
       // console.log("Permission Names: " + permissionNamesClient);
       // console.log("Granted bools: " + grantedPermissionClient);
