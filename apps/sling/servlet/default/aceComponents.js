@@ -9,13 +9,10 @@ class TitleBar extends React.Component {
 class Form extends React.Component {
 	render () {
 		var arrayOfPermissions = [];
-		let permissionsCount = permissionNamesClient.length;
-		for (var i = 0; i < permissionsCount; ++i) {
-			// Add a row for each property
-			arrayOfPermissions.push(<FormRow key={permissionNamesClient[i]} grantedBool={grantedPermissionClient[i]} deniedBool={deniedPermissionClient[i]} permissionName={permissionNamesClient[i]} />);
-			
-			// console.log("Passing granted, denied, permission: " + grantedPermissionClient[i] + deniedPermissionClient[i] + permissionNamesClient[i]);
-		}
+
+		Object.keys(permissionMapClient).forEach(permission => arrayOfPermissions.push(<FormRow key={permission} initialPrivilage={permissionMapClient[permission]} permissionName={permission} /> ));
+
+		// console.log(arrayOfPermissions);
 
 		return (
 		<form method="POST" action={contextPath + currentNodePath + ".modifyAce.html"} >
@@ -55,32 +52,15 @@ class FormRow extends React.Component {
 	constructor (props) {
 		super (props);
 
-		var initialPosition = 'none';
-
-		if (!(props.grantedBool || props.deniedBool)) {
-			initialPosition='none';
-		}
-		if (props.grantedBool) {
-			initialPosition='granted';
-		}
-		if (props.deniedBool) {
-			initialPosition='denied';
-		}
-
 		this.state = { // State isn't updated immediately?
-			position: initialPosition // Granted, Denied, or Ignored
+			position: props.initialPrivilage // Granted, Denied, or Ignored
 		};
-
-		// console.log("Debug position: " + initialPosition);
-
-		//this.handleChange = this.handleChange.bind(this);
 	}
 
 	handleChange (e) {
 		this.setState({
 			position: e.currentTarget.value
 		});
-
 	}
 
 	render () {
@@ -123,7 +103,7 @@ class DropdownForm extends React.Component {
          		<input type="hidden" name=":redirect" value={contextPath + currentNodePath + ".acl.html"} />
          		<input type="hidden" name="principalId" value={principalIdClient} />
 
-				<select> {permissionNamesClient.map(createItem)} </select>
+				<select> {Object.keys(permissionMapClient).map(createItem)} </select>
 
 		         <table width="100%" id="settingsTable">
 		            <thead>

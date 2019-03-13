@@ -64,7 +64,7 @@ class AccessControlEntries extends React.Component {
     for (var i = 0; i < nameCount; ++i) {
       arrayOfEntries.push( // Note that key = i is a bad key, need unique row key
         <EntriesList key={i} principalName={arrayOfNamesClient[i]} 
-        privilageDisplayname={arrayOfPrivilageDisplayNamesClient[i]} />)
+        privilageDisplayName={arrayOfPrivilageDisplayNamesClient[i]} />)
     }
 
     return (

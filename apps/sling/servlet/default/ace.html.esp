@@ -44,17 +44,10 @@
          var supported = privilegesInfo.getSupportedPrivileges(currentNode);
          var canModify = privilegesInfo.canModifyAccessControl(currentNode);
 
-         var permissionNames = [];
-         var grantedPermission = [];
-         var deniedPermission = [];
          var permissionMap = {};
 
          for (i=0; i < supported.length; i++) {
             var p = supported[i];
-            permissionNames.push(String(p.getName()));
-            grantedPermission.push(granted.contains(p));
-            deniedPermission.push(denied.contains(p));
-
 
             // Permissions Map
             if (!(granted.contains(p) || denied.contains(p))) {
@@ -70,10 +63,6 @@
                permissionMap[String(p.getName())] = "something is wrong";
             }
          }
-
-         permissionNames = JSON.stringify(permissionNames);
-         grantedPermission = JSON.stringify(grantedPermission);
-         deniedPermission = JSON.stringify(deniedPermission);
 
          permissionMap = JSON.stringify(permissionMap);
       }
@@ -115,17 +104,9 @@
       var canModifyClient = <%= canModify %>;
       var principalIdClient = "<%= principalId %>";
 
-      var permissionNamesClient = <%= permissionNames %>;
-      var grantedPermissionClient = <%= grantedPermission %>;
-      var deniedPermissionClient = <%= deniedPermission %>;
-
       var permissionMapClient = <%= permissionMap %>;
 
       console.log(permissionMapClient);
-
-      // console.log("Permission Names: " + permissionNamesClient);
-      // console.log("Granted bools: " + grantedPermissionClient);
-      // console.log("Denied Bools: " + deniedPermissionClient);
 
    </script>
 
