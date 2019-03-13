@@ -146,45 +146,47 @@ const toolbarStyles = theme => ({
   },
 });
 
-let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props;
+class EnhancedTableToolbar extends React.Component {
 
-  return (
-    <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      <div className={classes.title}>
-        {numSelected > 0 ? (
-          <Typography color="inherit" variant="subtitle1">
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography variant="h6" id="tableTitle">
-            Nutrition
-          </Typography>
-        )}
-      </div>
-      <div className={classes.spacer} />
-      <div className={classes.actions}>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </div>
-    </Toolbar>
-  );
-};
+  render () {
+    const {numSelected, classes} = this.props;
+    return (
+      <Toolbar
+        className={classNames(classes.root, {
+          [classes.highlight]: numSelected > 0,
+        })}
+      >
+        <div className={classes.title}>
+          {numSelected > 0 ? (
+            <Typography color="inherit" variant="subtitle1">
+              {numSelected} selected
+            </Typography>
+          ) : (
+            <Typography variant="h6" id="tableTitle">
+              Nutrition
+            </Typography>
+          )}
+        </div>
+        <div className={classes.spacer} />
+        <div className={classes.actions}>
+          {numSelected > 0 ? (
+            <Tooltip title="Delete">
+              <IconButton aria-label="Delete">
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Filter list">
+              <IconButton aria-label="Filter list">
+                <FilterListIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
+      </Toolbar>
+    );
+  }
+} 
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -287,7 +289,7 @@ class EnhancedTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead

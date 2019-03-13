@@ -116,8 +116,8 @@
 
   <script type="text/babel" src="/../../apps/sling/servlet/default/userTable.js">
   </script> 
-  <script type="text/babel" src="/../../apps/sling/servlet/default/buttonTest.js">
-  </script> 
+<!--   <script type="text/babel" src="/../../apps/sling/servlet/default/buttonTest.js">
+  </script>  -->
 
 </body>
 </html>
