@@ -1,5 +1,4 @@
 const {
-  lighten,
   withStyles,
   Table,
   TableBody,
@@ -16,8 +15,27 @@ const {
   Tooltip,
   DeleteIcon,
   FilterListIcon,
+
+  Input,
+  InputLabel,
+  InputAdornment,
+  FormControl,
+  TextField,
+  Grid,
+  Icon,
+  Button,
+  lighten,
+
+  MuiThemeProvider,
+  createMuiTheme,
+  CssBaseline,
+
   
 } = window['material-ui'];
+
+// const {
+//   AccountCircle,
+// } = window ['material-ui@icons'];
 
 const PropTypes = window.PropTypes;
 
@@ -28,6 +46,15 @@ let counter = 0;
 function createData(name, calories, fat, carbs, protein) {
   counter += 1;
   return { id: counter, name, calories, fat, carbs, protein };
+}
+
+function createDataFromUsers() {
+  var arrayOfData = [];
+  for (var i = 0; i < arrayOfNamesClient.length; ++i) {
+    arrayOfData.push(createData(arrayOfNamesClient[i], arrayOfPrivilageDisplayNamesClient[i], 0, 0, 0));
+  }
+
+  return arrayOfData;
 }
 
 function desc(a, b, orderBy) {
@@ -55,11 +82,11 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
-  { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-  { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-  { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-  { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+  { id: 'name', numeric: false, disablePadding: true, label: 'Username' },
+  { id: 'calories', numeric: false, disablePadding: false, label: 'Privilage Level' },
+  { id: 'fat', numeric: false, disablePadding: false, label: 'Last Modified Date' },
+  // { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
+  // { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -146,54 +173,52 @@ const toolbarStyles = theme => ({
   },
 });
 
-class EnhancedTableToolbar extends React.Component {
+let EnhancedTableToolbar = props => {
+  const { numSelected, classes } = props;
 
-  render () {
-    const {numSelected, classes} = this.props;
-    return (
-      <Toolbar
-        className={classNames(classes.root, {
-          [classes.highlight]: numSelected > 0,
-        })}
-      >
-        <div className={classes.title}>
-          {numSelected > 0 ? (
-            <Typography color="inherit" variant="subtitle1">
-              {numSelected} selected
-            </Typography>
-          ) : (
-            <Typography variant="h6" id="tableTitle">
-              Nutrition
-            </Typography>
-          )}
-        </div>
-        <div className={classes.spacer} />
-        <div className={classes.actions}>
-          {numSelected > 0 ? (
-            <Tooltip title="Delete">
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          ) : (
-            <Tooltip title="Filter list">
-              <IconButton aria-label="Filter list">
-                <FilterListIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
-      </Toolbar>
-    );
-  }
-} 
+  return (
+    <Toolbar
+      className={classNames(classes.root, {
+        [classes.highlight]: numSelected > 0,
+      })}
+    >
+      <div className={classes.title}>
+        {numSelected > 0 ? (
+          <Typography color="inherit" variant="subtitle1">
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography variant="h6" id="tableTitle">
+            Nutrition
+          </Typography>
+        )}
+      </div>
+      <div className={classes.spacer} />
+      <div className={classes.actions}>
+        {numSelected > 0 ? (
+          <Tooltip title="Delete">
+            <IconButton aria-label="Delete">
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton aria-label="Filter list">
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </div>
+    </Toolbar>
+  );
+};
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
 };
 
-EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
+const EnhancedTableToolbarTwo = withStyles(toolbarStyles)(EnhancedTableToolbar);
 
 const styles = theme => ({
   root: {
@@ -213,21 +238,22 @@ class EnhancedTable extends React.Component {
     order: 'asc',
     orderBy: 'calories',
     selected: [],
-    data: [
-      createData('Cupcake', 305, 3.7, 67, 4.3),
-      createData('Donut', 452, 25.0, 51, 4.9),
-      createData('Eclair', 262, 16.0, 24, 6.0),
-      createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-      createData('Gingerbread', 356, 16.0, 49, 3.9),
-      createData('Honeycomb', 408, 3.2, 87, 6.5),
-      createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-      createData('Jelly Bean', 375, 0.0, 94, 0.0),
-      createData('KitKat', 518, 26.0, 65, 7.0),
-      createData('Lollipop', 392, 0.2, 98, 0.0),
-      createData('Marshmallow', 318, 0, 81, 2.0),
-      createData('Nougat', 360, 19.0, 9, 37.0),
-      createData('Oreo', 437, 18.0, 63, 4.0),
-    ],
+    // data: [
+    //   createData('Cupcake', 305, 3.7, 67, 4.3),
+    //   createData('Donut', 452, 25.0, 51, 4.9),
+    //   createData('Eclair', 262, 16.0, 24, 6.0),
+    //   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+    //   createData('Gingerbread', 356, 16.0, 49, 3.9),
+    //   createData('Honeycomb', 408, 3.2, 87, 6.5),
+    //   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+    //   createData('Jelly Bean', 375, 0.0, 94, 0.0),
+    //   createData('KitKat', 518, 26.0, 65, 7.0),
+    //   createData('Lollipop', 392, 0.2, 98, 0.0),
+    //   createData('Marshmallow', 318, 0, 81, 2.0),
+    //   createData('Nougat', 360, 19.0, 9, 37.0),
+    //   createData('Oreo', 437, 18.0, 63, 4.0),
+    // ],
+    data: createDataFromUsers(),
     page: 0,
     rowsPerPage: 5,
   };
@@ -289,7 +315,7 @@ class EnhancedTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+        {/* <EnhancedTableToolbarTwo numSelected={selected.length} /> */}
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -318,13 +344,13 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        {n.name}
+                      <TableCell component="th" scope="row" padding="none" >
+                        <a href={contextPath + currentNodePath + ".ace.html?pid=" + n.name} >{n.name}
+                        </a>
                       </TableCell>
-                      <TableCell align="right">{n.calories}</TableCell>
-                      <TableCell align="right">{n.fat}</TableCell>
-                      <TableCell align="right">{n.carbs}</TableCell>
-                      <TableCell align="right">{n.protein}</TableCell>
+                      <TableCell align="left">{n.calories}</TableCell>
+                      <TableCell align="left">{n.fat}</TableCell>
+
                     </TableRow>
                   );
                 })}
@@ -363,8 +389,118 @@ EnhancedTable.propTypes = {
 const TableTest = withStyles(styles)(EnhancedTable);
 // export default withStyles(styles)(EnhancedTable);
 
+
+const styles2 = theme => ({
+  margin: {
+    margin: theme.spacing.unit,
+  },
+  icon: {
+    marginRight: theme.spacing.unit,
+  },
+});
+
+class InputWithIcon extends React.Component {
+  constructor (props) {
+    super(props);
+
+    this.state = { 
+      userEntered: "" 
+    };
+  }
+
+  handleSubmit = (event) => {
+    console.log("Event fired");
+  }
+
+  setUsernameEntered = (event) => {
+    this.setState ({
+      userEntered: event.target.value
+    });
+    // console.log("Username was entered: " + this.state.userEntered);
+  }
+
+  render () {
+    const { classes } = this.props;
+
+    var actionPath = contextPath + currentNodePath + ".ace.html";
+
+    return (
+      <div>
+      {/*
+        <FormControl className={classes.margin}>
+          <InputLabel htmlFor="input-with-icon-adornment">With a start adornment</InputLabel>
+          <Input
+            id="input-with-icon-adornment"
+            startAdornment={
+              <InputAdornment position="start">
+                <AccountCircle />
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+        <TextField
+          className={classes.margin}
+          id="input-with-icon-textfield"
+          label="TextField"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircle />
+              </InputAdornment>
+            ),
+          }}
+        />
+      */}
+        
+
+        <div className={classes.margin}>
+        <Typography variant="h5">
+          Add an entry for a user or group
+        </Typography>
+      {/* Two ways of doing this, handleSubmit function to send ajax to server using external library, or directly here using a form for simplicity */}
+        <form onSubmit={this.handleSubmit} method="GET" action={ actionPath }>
+          <Grid container spacing={8} alignItems="flex-end">
+            <Grid item>
+              <Icon className={classes.icon}>account_circle</Icon>
+            </Grid>
+              <Grid item>
+                <TextField id="input-with-icon-grid" label="Username" onChange={this.setUsernameEntered}/>
+              </Grid>
+              <Grid item>
+                <Button variant="raised" color="secondary" type="submit">
+                  <Icon className={classes.icon}>group_add</Icon>
+                  Add User
+                </Button>
+              </Grid>
+            </Grid>
+            <input type="hidden" value={this.state.userEntered} name="pid"/>
+          </form>
+        </div>
+      </div>
+    );
+  }
+}
+
+InputWithIcon.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+const InputTest = withStyles(styles2)(InputWithIcon);
+// export default withStyles(styles)(InputWithIcon);
+
+class Main extends React.Component {
+  render () {
+    return (
+      <div>
+        <InputTest />
+        <TableTest />
+      </div>
+    );
+  }
+}
+
 ReactDOM.render(
-  <TableTest />,
+  <Main />,
   // withStyles(styles, EnhancedTable),
   document.getElementById('table-test')
 );

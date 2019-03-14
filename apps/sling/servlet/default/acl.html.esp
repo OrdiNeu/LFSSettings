@@ -54,6 +54,7 @@
 
    <!-- CSS Style sheet for page -->
    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/../../apps/sling/servlet/default/toe.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
@@ -116,8 +117,8 @@
 
   <script type="text/babel" src="/../../apps/sling/servlet/default/userTable.js">
   </script> 
-<!--   <script type="text/babel" src="/../../apps/sling/servlet/default/buttonTest.js">
-  </script>  -->
+<!--   <script type="text/babel" src="/../../apps/sling/servlet/default/buttonTest.js"> -->
+  </script> 
 
 </body>
 </html>
