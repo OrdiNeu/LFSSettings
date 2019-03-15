@@ -36,6 +36,8 @@ const {
   DialogContentText,
   DialogTitle,
 
+  MenuItem,
+
   
 } = window['material-ui'];
 
@@ -515,7 +517,7 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
 }
 
 function getSuggestions(value) {
-  const inputValue = deburr(value.trim()).toLowerCase();
+  const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
   let count = 0;
 
@@ -531,6 +533,10 @@ function getSuggestions(value) {
 
         return keep;
       });
+}
+
+function getSuggestionValue(suggestion) {
+  return suggestion.label;
 }
 
 
@@ -584,9 +590,9 @@ class InputWithIcon extends React.Component {
     console.log("Event fired");
   }
 
-  setUsernameEntered = (event) => {
+  setUsernameEntered = (event, {newValue}) => {
     this.setState ({
-      userEntered: event.target.value
+      userEntered: newValue,
     });
     // console.log("Username was entered: " + this.state.userEntered);
   }
@@ -605,6 +611,15 @@ class InputWithIcon extends React.Component {
 
   render () {
     const { classes } = this.props;
+
+    const autosuggestProps = {
+      renderInputComponent,
+      suggestions: this.state.suggestions,
+      onSuggestionsFetchRequested: this.handleSuggestionsFetchRequested,
+      onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
+      getSuggestionValue,
+      renderSuggestion,
+    };
 
     var actionPath = contextPath + currentNodePath + ".ace.html";
 
@@ -648,14 +663,15 @@ class InputWithIcon extends React.Component {
               <Icon className={classes.icon}>account_circle</Icon>
             </Grid>
               <Grid item>
-                <TextField id="input-with-icon-grid" label="Username" onChange={this.setUsernameEntered}/> 
-                {/* <Autosuggest
+                {/* <TextField id="input-with-icon-grid" label="Username" onChange={this.setUsernameEntered}/> */}
+                <Autosuggest
                   {...autosuggestProps}
                   inputProps={{
                     classes,
                     placeholder: 'Search a user',
-                    value: this.state.single,
-                    onChange: this.handleChange('single'),
+                    value: this.state.userEntered,
+                    onChange: this.setUsernameEntered,
+                    label: 'Username'
                   }}
                   theme={{
                     container: classes.container,
@@ -668,7 +684,7 @@ class InputWithIcon extends React.Component {
                       {options.children}
                     </Paper>
                   )}
-                /> */}
+                />
               </Grid>
               <Grid item>
                 <Button variant="raised" color="secondary" type="submit">
