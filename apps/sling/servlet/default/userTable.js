@@ -30,6 +30,12 @@ const {
   createMuiTheme,
   CssBaseline,
 
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+
   
 } = window['material-ui'];
 
@@ -41,6 +47,14 @@ const PropTypes = window.PropTypes;
 
 const ClassNames = window.ClassNames;
 
+const Select = window.Select;
+
+// const Autosuggest = window['react-autosuggest'];
+const Autosuggest = window.Autosuggest;
+
+const Match = window.AutosuggestHighlightMatch;
+
+const Parse = window.AutosuggestHighlightParse;
 
 let counter = 0;
 function createData(name, calories, fat, carbs, protein) {
@@ -176,19 +190,56 @@ const toolbarStyles = theme => ({
 class EnhancedTableToolbar extends React.Component {
   constructor (props) {
     super(props);
-    
+
+    this.state = ({
+      warningIsOpen: false
+    })
   }
+
+  handleClose = () => {
+    this.setState({
+      warningIsOpen: false,
+    });
+  };
+
+  handleDelete = () => {
+    this.setState({
+      warningIsOpen: true,
+    });
+  };
+
+  handleSubmit = () => {
+    document.getElementById("delete-users-form-react").submit();
+  };
   
   render () {
     const { numSelected, classes } = this.props;
 
     return (
+
+
       <Toolbar
         className={classNames(classes.root, {
           [classes.highlight]: numSelected > 0,
         })}
       >
         <div className={classes.title}>
+
+      <Dialog open={this.state.warningIsOpen} onClose={this.handleClose}>
+        <DialogTitle>Are you sure you wish to remove?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Their permissions will be deleted for good.</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" type="submit" onClick={this.handleSubmit}>
+            OK
+          </Button>
+          <Button color="primary" onClick={this.handleClose}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
           {numSelected > 0 ? (
             <Typography color="inherit" variant="subtitle1">
               {numSelected} users selected
@@ -203,7 +254,7 @@ class EnhancedTableToolbar extends React.Component {
         <div className={classes.actions}>
           {numSelected > 0 ? (
             <Tooltip title="Delete">
-              <IconButton aria-label="Delete">
+              <IconButton aria-label="Delete" onClick={this.handleDelete}>
                 <Icon className={classes.icon}>delete</Icon>
               </IconButton>
             </Tooltip>
@@ -324,9 +375,12 @@ class EnhancedTable extends React.Component {
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
+    var actionPath = contextPath + currentNodePath + ".deleteAce.html";
+    
     return (
       <Paper className={classes.root}>
+        <form method="POST" action={ actionPath } id="delete-users-form-react" >
+        <input type="hidden" name=":redirect" placeholder={ contextPath } />
         { <EnhancedTableToolbarTwo numSelected={selected.length} /> }
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
@@ -354,7 +408,8 @@ class EnhancedTable extends React.Component {
                       selected={isSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} />
+                        <Checkbox checked={isSelected} name=":applyTo"
+                      value={n.name} />
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none" >
                         <a href={contextPath + currentNodePath + ".ace.html?pid=" + n.name} >{n.name}
@@ -366,14 +421,16 @@ class EnhancedTable extends React.Component {
                     </TableRow>
                   );
                 })}
-              {emptyRows > 0 && (
+              {/*emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
-              )}
+              )*/}
             </TableBody>
           </Table>
+          
         </div>
+        </form>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -402,12 +459,114 @@ const TableTest = withStyles(styles)(EnhancedTable);
 // export default withStyles(styles)(EnhancedTable);
 
 
+
+
+
+
+
+
+
+// Suggestion generator
+const suggestions = arrayOfNamesClient.map(function(aName) {
+  return {label: aName}
+});
+
+function renderInputComponent(inputProps) {
+  const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+
+  return (
+    <TextField
+      fullWidth
+      InputProps={{
+        inputRef: node => {
+          ref(node);
+          inputRef(node);
+        },
+        classes: {
+          input: classes.input,
+        },
+      }}
+      {...other}
+    />
+  );
+}
+
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+  const matches = Match(suggestion.label, query);
+  const parts = Parse(suggestion.label, matches);
+
+  return (
+    <MenuItem selected={isHighlighted} component="div">
+      <div>
+        {parts.map((part, index) =>
+          part.highlight ? (
+            <span key={String(index)} style={{ fontWeight: 500 }}>
+              {part.text}
+            </span>
+          ) : (
+            <strong key={String(index)} style={{ fontWeight: 300 }}>
+              {part.text}
+            </strong>
+          ),
+        )}
+      </div>
+    </MenuItem>
+  );
+}
+
+function getSuggestions(value) {
+  const inputValue = deburr(value.trim()).toLowerCase();
+  const inputLength = inputValue.length;
+  let count = 0;
+
+  return inputLength === 0
+    ? []
+    : suggestions.filter(suggestion => {
+        const keep =
+          count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+
+        if (keep) {
+          count += 1;
+        }
+
+        return keep;
+      });
+}
+
+
+
 const styles2 = theme => ({
   margin: {
     margin: theme.spacing.unit,
   },
   icon: {
     marginRight: theme.spacing.unit,
+  },
+  // Theme for suggestions
+  root: {
+    height: 250,
+    flexGrow: 1,
+  },
+  container: {
+    position: 'relative',
+  },
+  suggestionsContainerOpen: {
+    position: 'absolute',
+    zIndex: 1,
+    marginTop: theme.spacing.unit,
+    left: 0,
+    right: 0,
+  },
+  suggestion: {
+    display: 'block',
+  },
+  suggestionsList: {
+    margin: 0,
+    padding: 0,
+    listStyleType: 'none',
+  },
+  divider: {
+    height: theme.spacing.unit * 2,
   },
 });
 
@@ -416,7 +575,8 @@ class InputWithIcon extends React.Component {
     super(props);
 
     this.state = { 
-      userEntered: "" 
+      userEntered: "",
+      suggestions: [],
     };
   }
 
@@ -430,6 +590,18 @@ class InputWithIcon extends React.Component {
     });
     // console.log("Username was entered: " + this.state.userEntered);
   }
+
+  handleSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: getSuggestions(value),
+    });
+  };
+
+  handleSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: [],
+    });
+  };
 
   render () {
     const { classes } = this.props;
@@ -476,7 +648,27 @@ class InputWithIcon extends React.Component {
               <Icon className={classes.icon}>account_circle</Icon>
             </Grid>
               <Grid item>
-                <TextField id="input-with-icon-grid" label="Username" onChange={this.setUsernameEntered}/>
+                <TextField id="input-with-icon-grid" label="Username" onChange={this.setUsernameEntered}/> 
+                {/* <Autosuggest
+                  {...autosuggestProps}
+                  inputProps={{
+                    classes,
+                    placeholder: 'Search a user',
+                    value: this.state.single,
+                    onChange: this.handleChange('single'),
+                  }}
+                  theme={{
+                    container: classes.container,
+                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                    suggestionsList: classes.suggestionsList,
+                    suggestion: classes.suggestion,
+                  }}
+                  renderSuggestionsContainer={options => (
+                    <Paper {...options.containerProps} square>
+                      {options.children}
+                    </Paper>
+                  )}
+                /> */}
               </Grid>
               <Grid item>
                 <Button variant="raised" color="secondary" type="submit">
