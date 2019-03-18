@@ -43,6 +43,21 @@
 
    arrayOfNames = JSON.stringify(arrayOfNames);
    arrayOfPrivilageDisplayNames = JSON.stringify(arrayOfPrivilageDisplayNames);
+
+   // Fetch all users
+   // var request = new XMLHttpRequest();
+   // var arrayOfAllUsers = [];
+   //  request.onreadystatechange=function(){
+   //    if (request.readyState==4 && request.status==200){
+   //      alert(request.status);
+   //      // To get the response use request.responseText;
+   //      arrayOfAllUsers = Object.keys(JSON.parse(request.responseText));
+   //    }
+   //  }
+   //  request.open("GET", "http://localhost:8080/system/userManager/user.tidy.1.json");
+   //  request.send(null);
+
+   //  arrayOfAllUsers = JSON.stringify(arrayOfAllusers);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" lang="en"
@@ -68,6 +83,10 @@
 
    var arrayOfNamesClient = <%= arrayOfNames %>; // TODO: Breaks with more than one
    var arrayOfPrivilageDisplayNamesClient = <%= arrayOfPrivilageDisplayNames %>;
+   // var arrayOfAllUsersClient = <= arrayOfAllUsers %>;
+   // console.log(arrayOfAllUsersClient);
+   console.log(currentNodePath);
+
    console.log(arrayOfNamesClient);
    console.log(arrayOfPrivilageDisplayNamesClient);
 

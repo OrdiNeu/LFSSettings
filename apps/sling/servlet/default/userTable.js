@@ -469,9 +469,29 @@ const TableTest = withStyles(styles)(EnhancedTable);
 
 
 // Suggestion generator
-const suggestions = arrayOfNamesClient.map(function(aName) {
+var suggestions = arrayOfNamesClient.map(function(aName) {
   return {label: aName}
 });
+
+function populateSuggestions() {
+     // Fetch all users
+    var request = new XMLHttpRequest();
+    var arrayOfAllUsers = [];
+     request.onreadystatechange=function(){
+       if (request.readyState==4 && request.status==200){
+         //alert(request.status);
+         // To get the response use request.responseText;
+         arrayOfAllUsers = Object.keys(JSON.parse(request.responseText));
+         suggestions = arrayOfAllUsers.map(function(aName) {
+            return {label: aName}
+          });
+          console.log(suggestions);
+       }
+     }
+     // Bad way to get all users, should be searching using JSON and xpath
+     request.open("GET", "http://localhost:8080/system/userManager/user.tidy.1.json");
+     request.send(null);
+}
 
 function renderInputComponent(inputProps) {
   const { classes, inputRef = () => {}, ref, ...other } = inputProps;
@@ -570,6 +590,9 @@ const styles2 = theme => ({
     margin: 0,
     padding: 0,
     listStyleType: 'none',
+    maxHeight: '200px',
+    overflow: 'auto',
+
   },
   divider: {
     height: theme.spacing.unit * 2,
@@ -584,6 +607,8 @@ class InputWithIcon extends React.Component {
       userEntered: "",
       suggestions: [],
     };
+
+    populateSuggestions();
   }
 
   handleSubmit = (event) => {
