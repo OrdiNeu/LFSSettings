@@ -11,14 +11,14 @@ function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-class AlertDialogSlide extends React.Component {
+class UsernameTakenDialog extends React.Component {
   state = {
-    open: false,
+    open: true,
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+  // handleClickOpen = () => {
+  //   this.setState({ open: true });
+  // };
 
   handleClose = () => {
     this.setState({ open: false });
@@ -27,11 +27,8 @@ class AlertDialogSlide extends React.Component {
   render() {
     return (
       <div>
-        <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-          Slide in alert dialog
-        </Button>
         <Dialog
-          open={this.state.open}
+          open={true}
           TransitionComponent={Transition}
           keepMounted
           onClose={this.handleClose}
@@ -39,20 +36,16 @@ class AlertDialogSlide extends React.Component {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle id="alert-dialog-slide-title">
-            {"Use Google's location service?"}
+            {"Error in creating user."}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              Let Google help apps determine location. This means sending anonymous location data to
-              Google, even when no apps are running.
+              Looks like this user is taken. Please try a different username.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Disagree
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Agree
+            <Button onClick={this.props.handleClose} color="primary">
+              Ok
             </Button>
           </DialogActions>
         </Dialog>
@@ -61,4 +54,4 @@ class AlertDialogSlide extends React.Component {
   }
 }
 
-export default AlertDialogSlide;
+export default UsernameTakenDialog;

@@ -44,6 +44,7 @@
         <%
     } else {
         %>
+    <!-- 
     <div class="container">
 
       <form class="form-signin" method="POST" action="<%= request.getContextPath() %><%= resource.getPath() %>.user.html" enctype="multipart/form-data" accept-charset="UTF-8">
@@ -64,19 +65,19 @@
       </form>
 
     </div>
-
+    -->
     <div id=main-login-container> Sign in here </div>
         <%
     }
     %>
 	
+    <!-- Global vars for where to send login request -->
 	<script>
         var loginRedirectPath="<%= request.getContextPath() %><%= resource.getPath() %>.user.html";
         var loginValidationPOSTPath="<%= request.getContextPath() %><%= resource.getPath() %>.user.html/j_security_check";
     </script>
 
-     <!-- Load our React component. -->
-     <!-- Note the type="text/babel" indicates that this uses JSX -->
+     <!-- Load our React component. This is pre-transpiled bundle including all dependencies -->
     <script src="<%= request.getContextPath() %><%= resource.getPath() %>/resources/js/components/bundle.js"></script>
 
 </body>

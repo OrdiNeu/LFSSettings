@@ -1,114 +1,281 @@
-import React,{useState} from 'react'
-import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel } from '@material-ui/core'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import withStyles from '@material-ui/core/styles/withStyles'
-import { Link, withRouter } from 'react-router-dom'
-const styles = theme => ({
-	main: {
-		width: 'auto',
-		display: 'block', // Fix IE 11 issue.
-		marginLeft: theme.spacing.unit * 3,
-		marginRight: theme.spacing.unit * 3,
-		[theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-			width: 400,
-			marginLeft: 'auto',
-			marginRight: 'auto',
-		},
-	},
-	paper: {
-		marginTop: theme.spacing.unit * 8,
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-	},
-	avatar: {
-		margin: theme.spacing.unit,
-		backgroundColor: theme.palette.secondary.main,
-	},
-	form: {
-		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing.unit,
-	},
-	submit: {
-		marginTop: theme.spacing.unit * 3,
-	},
-})
+import React, { useState } from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Icon from '@material-ui/core/Icon';
+import { Formik } from "formik";
+import * as Yup from "yup";
+import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
 
-function Register(props) {
-	const { classes } = props
+import UsernameTakenDialog from './ErrorDialogues';
 
-	// I'm produce state using useState.
-	// The second parameter that will keep the first parameter value will change the value.
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
-	const [name, setName] = useState('')
-	const [fruit, setFruit] = useState('')
+import styles from "./styles";
 
-	//When the form is submitted it will run
-	function onSubmit(e){
-		e.preventDefault()//blocks the postback event of the page
-		console.log('email: '+email)
-		console.log('password: '+password)
-		console.log('name: '+name)
-		console.log('fruit: '+fruit)
+class Form extends React.Component {
+	constructor(props) {
+		super(props);
+
 	}
 
+	render() {
 
-	return (
-		<main className={classes.main}>
-			<Paper className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
-				</Avatar>
-				<Typography component="h1" variant="h5">
-					Register Account
-       			</Typography>
-				<form className={classes.form} onSubmit={onSubmit}>
-					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="name">Name</InputLabel>
-						{/* When the name field is changed, setName will run and assign the name to the value in the input. */}
-						<Input id="name" name="name" autoComplete="off" autoFocus value={name} onChange={e => setName(e.target.value)}  />
-					</FormControl>
-					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="email">Email Address</InputLabel>
-						{/* When the e-mail field is changed, setEmail will run and assign the e-mail to the value in the input. */}
-						<Input id="email" name="email" autoComplete="off" value={email} onChange={e => setEmail(e.target.value)}   />
-					</FormControl>
-					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="password">Password</InputLabel>
-						{/* When the password field is changed, setPassword will run and assign the password to the value in the input. */}
-						<Input name="password" type="password" id="password" autoComplete="off" value={password} onChange={e => setPassword(e.target.value)}  />
-					</FormControl>
-					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="fruit">Your Favorite Fruit</InputLabel>
-						{/* When the fruit field is changed, setFruit will run and assign the fruit to the value in the input. */}
-						<Input name="fruit" type="text" id="fruit" autoComplete="off" value={fruit} onChange={e => setFruit(e.target.value)}  />
-					</FormControl>
+		const { classes } = this.props;
 
+		const {
+			values: { name, email, password, confirmPassword },
+			errors,
+			touched,
+			handleSubmit,
+			handleChange,
+			isValid,
+			setFieldTouched
+		} = this.props;
+
+
+		const change = (name, e) => {
+			e.persist();
+			handleChange(e);
+			setFieldTouched(name, true, false);
+		};
+
+		return (
+			<form
+				onSubmit={handleSubmit}
+				className={classes.form}
+			>
+				<TextField
+					id="name"
+					name="name"
+					helperText={touched.name ? errors.name : ""}
+					error={touched.name && Boolean(errors.name)}
+					label="Name"
+					value={name}
+					onChange={change.bind(null, "name")}
+					fullWidth
+					className={classes.form}
+					required
+					autoFocus
+
+				/>
+				<TextField
+					id="email"
+					name="email"
+					helperText={touched.email ? errors.email : ""}
+					error={touched.email && Boolean(errors.email)}
+					label="Email"
+					fullWidth
+					value={email}
+					onChange={change.bind(null, "email")}
+					className={classes.form}
+					required
+
+				/>
+				<TextField
+					id="password"
+					name="password"
+					helperText={touched.password ? errors.password : ""}
+					error={touched.password && Boolean(errors.password)}
+					label="Password"
+					fullWidth
+					type="password"
+					value={password}
+					onChange={change.bind(null, "password")}
+					className={classes.form}
+					required
+
+				/>
+				<TextField
+					id="confirmPassword"
+					name="confirmPassword"
+					helperText={touched.confirmPassword ? errors.confirmPassword : ""}
+					error={touched.confirmPassword && Boolean(errors.confirmPassword)}
+					label="Confirm Password"
+					fullWidth
+					type="password"
+					value={confirmPassword}
+					onChange={change.bind(null, "confirmPassword")}
+					className={classes.form}
+					required
+
+				/>
+				{!isValid ? 
+					// Render hover over and button
+					<React.Fragment> 
+						<Tooltip title="You must fill in all fields.">
+							<div>
+								<Button
+									type="submit"
+									fullWidth
+									variant="contained"
+									color="primary"
+									disabled={!isValid}
+									className={classes.submit}
+								>
+									Submit
+								</Button>
+							</div>
+						</Tooltip>
+					</React.Fragment> : 
+					// Else just render the button
 					<Button
-						type="submit"
-						fullWidth
-						variant="contained"
-						color="primary"
-						className={classes.submit}>
-						Register
-          			</Button>
-
-					<Button
-						type="submit"
-						fullWidth
-						variant="contained"
-						color="secondary"
-						component={Link}
-						to="/login"
-						className={classes.submit}>
-						Go back to Login
-          			</Button>
-				</form>
-			</Paper>
-		</main>
-	)
+					type="submit"
+					fullWidth
+					variant="contained"
+					color="primary"
+					disabled={!isValid}
+					className={classes.submit}
+					>
+						Submit
+					</Button>
+				}
+			</form>
+		);
+	}
 }
 
-export default withRouter(withStyles(styles)(Register))
+// export default withStyles(styles)(InputForm);
+const FormComponent = withStyles(styles)(Form);
+
+class InputForm extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			usernameError: false
+		};
+
+		this.displayError = this.displayError.bind(this);
+		this.submitValues = this.submitValues.bind(this);
+		this.hideError = this.hideError.bind(this);
+	}
+
+	displayError() {
+		this.setState({
+			usernameError: true
+		}, () => { console.log("State has changed"); });
+	}
+
+	hideError() {
+		this.setState({
+			usernameError: false
+		}, () => { console.log("Error has been hidden"); });
+	}
+
+	//  componentDidUpdate() {
+	//   const { errors } = this.props;
+
+	//   this.form.setErrors(errors);
+	// }
+
+	// submit function
+	submitValues({ name, email, confirmPassword, password }) {
+		console.log({ name, email, confirmPassword, password });
+
+		// Use native fetch, sort like the XMLHttpRequest so 
+		//  no need for other libraries.
+		function handleErrors(response) {
+			if (response.status == 500) {
+				console.log('Detected 500 response');
+			}
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			return response;
+		}
+
+		// Build formData object.
+		// We need to do this because sling does not accept JSON, need
+		//  url encoded data
+		let formData = new FormData();
+		formData.append(":name", name);
+		formData.append('pwd', password);
+		formData.append('pwdConfirm', confirmPassword);
+		formData.append('email', email);
+
+		// Important note about native fetch, it does not reject failed
+		// HTTP codes, it'll only fail when network error
+		// Therefore, you must handle the error code yourself.
+		fetch('/system/userManager/user.create.html', {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				// 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+			},
+			body: formData
+		})
+			.then(handleErrors) // Handle errors first
+			.then(function (response) {
+				alert("Created user!");
+			})
+			.catch(function (error) {
+				// alert("Error creating user. Check console.");
+				this.setState({
+					usernameError: true
+				}, () => { console.log("State has changed"); });
+			}.bind(this)); // Not sure why .bind(this) is needed here, setState will not work otherwise.
+	}
+
+	render() {
+		const { classes } = this.props;
+		const values = { name: "", email: "", confirmPassword: "", password: "" };
+
+		const validationSchema = Yup.object({
+			name: Yup.string("Enter a name")
+				.required("Name is required"),
+			email: Yup.string("Enter your email")
+				.email("Enter a valid email")
+				.required("Email is required"),
+			password: Yup.string("")
+				.min(8, "Password must contain at least 8 characters")
+				.required("Enter your password"),
+			confirmPassword: Yup.string("Enter your password")
+				.required("Confirm your password")
+				.oneOf([Yup.ref("password")], "Password does not match"),
+		});
+
+		// Hooks only work inside functional components
+		// const formikRef = React.useRef();
+
+		return (
+			<React.Fragment>
+				{(this.state.usernameError) &&
+					<UsernameTakenDialog handleClose={this.hideError} ></UsernameTakenDialog>
+				}
+				<div className={classes.main}>
+					<Paper elevation={1} className={classes.paper}>
+						<Typography component="h1" variant="h5">
+							Sign Up Form
+			</Typography>
+						<Avatar className={classes.avatar}>
+							<Icon>group_add</Icon>
+						</Avatar>
+						<Formik
+							render={props => <FormComponent {...props} />}
+							initialValues={values}
+							validationSchema={validationSchema}
+							onSubmit={this.submitValues}
+							//  ref={formikRef}
+							ref={el => (this.form = el)}
+						/>
+						<Typography>
+							Already have an account?
+			</Typography>
+						<Button
+							fullWidth
+							variant="contained"
+							color="secondary"
+							onClick={this.props.swapForm}
+						>
+							Sign In
+			</Button>
+					</Paper>
+				</div>
+			</React.Fragment>
+		);
+	}
+}
+
+export default withStyles(styles)(InputForm);
+  // const InputFormComponent = withStyles(styles)(InputForm);
