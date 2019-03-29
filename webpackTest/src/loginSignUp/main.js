@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Slide from '@material-ui/core/Slide';
-import InputForm from './signUpForm';
+import SignUpForm from './signUpForm';
 import SignIn from './loginForm';
 
 class MainPageContainer extends React.Component {
@@ -23,7 +23,7 @@ class MainPageContainer extends React.Component {
   render () {
     return (
       <div>
-        {this.state.signInShown ? <SignIn swapForm={this.handleSwap} /> : <InputForm swapForm={this.handleSwap} />}
+        {this.state.signInShown ? <SignIn swapForm={this.handleSwap} /> : <SignUpForm swapForm={this.handleSwap} />}
       </div>
     );
   }

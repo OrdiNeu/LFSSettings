@@ -12,9 +12,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import UsernameTakenDialog from './ErrorDialogues';
 
-import styles from "./styles";
+import styles from "../styling/styles";
 
-class Form extends React.Component {
+class FormFields extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -137,9 +137,9 @@ class Form extends React.Component {
 }
 
 // export default withStyles(styles)(InputForm);
-const FormComponent = withStyles(styles)(Form);
+const FormFieldsComponent = withStyles(styles)(FormFields);
 
-class InputForm extends React.Component {
+class SignUpForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -252,7 +252,7 @@ class InputForm extends React.Component {
 							<Icon>group_add</Icon>
 						</Avatar>
 						<Formik
-							render={props => <FormComponent {...props} />}
+							render={props => <FormFieldsComponent {...props} />}
 							initialValues={values}
 							validationSchema={validationSchema}
 							onSubmit={this.submitValues}
@@ -277,5 +277,5 @@ class InputForm extends React.Component {
 	}
 }
 
-export default withStyles(styles)(InputForm);
+export default withStyles(styles)(SignUpForm);
   // const InputFormComponent = withStyles(styles)(InputForm);

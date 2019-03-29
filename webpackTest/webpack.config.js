@@ -1,6 +1,10 @@
 module.exports = {
   mode: 'development',
-  entry: './src/loginForm.js',
+  entry: {
+    loginSignUp: './src/loginSignUp/main.js',
+    navbar: './src/navbar/navbarMain.js',
+    userSplash: './src/userSplash/userSplashPage.js'
+  },
   module: {
     rules: [
       {
@@ -16,7 +20,7 @@ module.exports = {
   output: {
     path: __dirname + '/dist',
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   devServer: {
     contentBase: './dist'

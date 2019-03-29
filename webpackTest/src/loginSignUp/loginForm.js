@@ -16,7 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Icon from '@material-ui/core/Icon';
 
-import styles from "./styles";
+import styles from "../styling/styles";
 
 class SignIn extends React.Component {
   constructor(props) {
