@@ -149,6 +149,7 @@ class SignUpForm extends React.Component {
 		this.displayError = this.displayError.bind(this);
 		this.submitValues = this.submitValues.bind(this);
 		this.hideError = this.hideError.bind(this);
+		this.updateResource = this.updateResource.bind(this);
 	}
 
 	displayError() {
@@ -168,6 +169,30 @@ class SignUpForm extends React.Component {
 
 	//   this.form.setErrors(errors);
 	// }
+
+	// Hacky way to update resource for Sling User so that we
+	// are able to render the page
+	// Equivalent to: curl -F "resourceType=slingshot/User" http://admin:admin@localhost:8080/content/slingshot/users/slingshot15
+	updateResource(username) {
+		let url2 = "/content/slingshot/users/" + username;
+		let formData2 = new formData();
+		formData.append("sling:resource", "slingshot/User");
+
+		fetch(url2, {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Authorization': 'Basic ' + btoa('admin:admin'),
+			},
+			body: formData2
+		})
+		.then(function (response) {
+			console.log("Node has been changed");
+		})
+		.catch(function (error) {
+			console.log("Node has NOT been changed");
+		}); // Not sure why .bind(this) is needed here, setState will not work otherwise.
+	}
 
 	// submit function
 	submitValues({ name, email, confirmPassword, password }) {
@@ -207,6 +232,8 @@ class SignUpForm extends React.Component {
 		})
 			.then(handleErrors) // Handle errors first
 			.then(function (response) {
+				// updateResource(name);
+				// this.updateResource(name);
 				alert("Created user!");
 			})
 			.catch(function (error) {
@@ -215,6 +242,25 @@ class SignUpForm extends React.Component {
 					usernameError: true
 				}, () => { console.log("State has changed"); });
 			}.bind(this)); // Not sure why .bind(this) is needed here, setState will not work otherwise.
+
+		let url2 = "/content/slingshot/users/" + name;
+		let formData2 = new FormData();
+		formData2.append("sling:resourceType", "slingshot/User");
+
+		fetch(url2, {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Authorization': 'Basic ' + btoa('admin:admin'),
+			},
+			body: formData2
+		})
+		.then(function (response) {
+			console.log("Node has been changed");
+		})
+		.catch(function (error) {
+			console.log("Node has NOT been changed");
+		}); 
 	}
 
 	render() {

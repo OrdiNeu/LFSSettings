@@ -3,7 +3,8 @@ module.exports = {
   entry: {
     loginSignUp: './src/loginSignUp/main.js',
     navbar: './src/navbar/navbarMain.js',
-    userSplash: './src/userSplash/userSplashPage.js'
+    userSplash: './src/userSplash/userSplashPage.js',
+    index: './src/homePage/index.js'
   },
   module: {
     rules: [

@@ -41,9 +41,15 @@
         <p class="bg-primary">Welcome back, <%= request.getRemoteUser() %></p>
         <p class="bg-warning"><a href="<%= request.getContextPath() %><%= SlingshotConstants.APP_ROOT_PATH %>/users/<%= request.getRemoteUser() %>.html">Go to your SlingShot home page</a></p>
     </div>
+
+    <div id="navbar-container"> Navbar here </div>
+
+    <script src="/../../content/slingshot/resources/js/components/userSplash.js"> </script>
+
         <%
     } else {
         %>
+    <!-- 
     <div class="container">
 
       <form class="form-signin" method="POST" action="<%= request.getContextPath() %><%= resource.getPath() %>.user.html" enctype="multipart/form-data" accept-charset="UTF-8">
@@ -64,20 +70,21 @@
       </form>
 
     </div>
-
+    -->
     <div id=main-login-container> Sign in here </div>
         <%
     }
     %>
 	
+    <!-- Global vars for where to send login request -->
+    <!-- If we do not post to j_security_check and goto http://localhost:8080/?sling:authRequestLogin=1 instead, I can't figure out how to log out. -->
 	<script>
         var loginRedirectPath="<%= request.getContextPath() %><%= resource.getPath() %>.user.html";
         var loginValidationPOSTPath="<%= request.getContextPath() %><%= resource.getPath() %>.user.html/j_security_check";
     </script>
 
-     <!-- Load our React component. -->
-     <!-- Note the type="text/babel" indicates that this uses JSX -->
-    <script src="<%= request.getContextPath() %><%= resource.getPath() %>/resources/js/components/bundle.js"></script>
+     <!-- Load our React component. This is pre-transpiled bundle including all dependencies -->
+    <script src="<%= request.getContextPath() %><%= resource.getPath() %>/resources/js/components/loginSignUp.js"></script>
 
 </body>
     <sling:include resource="<%= resource %>" replaceSelectors="bottom"/>
