@@ -43,6 +43,21 @@
 
    arrayOfNames = JSON.stringify(arrayOfNames);
    arrayOfPrivilageDisplayNames = JSON.stringify(arrayOfPrivilageDisplayNames);
+
+   // Fetch all users
+   // var request = new XMLHttpRequest();
+   // var arrayOfAllUsers = [];
+   //  request.onreadystatechange=function(){
+   //    if (request.readyState==4 && request.status==200){
+   //      alert(request.status);
+   //      // To get the response use request.responseText;
+   //      arrayOfAllUsers = Object.keys(JSON.parse(request.responseText));
+   //    }
+   //  }
+   //  request.open("GET", "http://localhost:8080/system/userManager/user.tidy.1.json");
+   //  request.send(null);
+
+   //  arrayOfAllUsers = JSON.stringify(arrayOfAllusers);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" lang="en"
@@ -54,6 +69,7 @@
 
    <!-- CSS Style sheet for page -->
    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/../../apps/sling/servlet/default/toe.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
@@ -67,21 +83,31 @@
 
    var arrayOfNamesClient = <%= arrayOfNames %>; // TODO: Breaks with more than one
    var arrayOfPrivilageDisplayNamesClient = <%= arrayOfPrivilageDisplayNames %>;
+   // var arrayOfAllUsersClient = <= arrayOfAllUsers %>;
+   // console.log(arrayOfAllUsersClient);
+   console.log(currentNodePath);
+
    console.log(arrayOfNamesClient);
    console.log(arrayOfPrivilageDisplayNamesClient);
 
 </script>
 
-<h2> Hi there. The below should be React components </h2>
-<%= <h1> The following is being client rendered </h1> %>
+<!-- <h2> Hi there. The below should be React components </h2> -->
+<!-- <h1> The following is being client rendered </h1>  -->
 
-  <div id="main-container"> </div>
+<!--   <div id="main-container"> </div>
 
    <div> Here is a Game component </div>
    <div class="games">GameHere</div>
 
    <div> Here is reusing the Game component </div>
-   <div class="games">GameHere</div>
+   <div class="games">GameHere</div> -->
+
+   <!-- <div> Live table here </div> -->
+   <div id=table-test class=table-test-class></div>
+
+<!--    <div>Button is here </div>
+   <div id=button-test></div> -->
 
   <!-- Load React. -->
   <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
@@ -95,13 +121,30 @@
    <!-- Note the type="text/babel" indicates that this uses JSX -->
   <script type="text/babel" src="<%= request.getContextPath() %>/../../apps/sling/servlet/default/toe.js"></script>
 
-  <script type="text/babel" src="/../../apps/sling/servlet/default/aclComponents.js">
-  </script> 
+<!--   <script type="text/babel" src="/../../apps/sling/servlet/default/aclComponents.js">
+  </script>  -->
 
   <!-- Material UI and corresponding stylesheet -->
   <script src="https://unpkg.com/@material-ui/core/umd/material-ui.production.min.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 
+  <!-- Proptypes development version -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
+
+  <!-- ClassNames development version -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/classnames/2.2.5/index.js"></script>
+
+  <!-- React-Select development version -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-select/2.4.2/react-select.js"></script>
+<script src="https://unpkg.com/react-autosuggest/dist/standalone/autosuggest.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/autosuggest-highlight@3.1.1/umd/parse/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/autosuggest-highlight@3.1.1/umd/match/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+
+  <script type="text/babel" src="/../../apps/sling/servlet/default/userTable.js">
+  </script> 
+<!--   <script type="text/babel" src="/../../apps/sling/servlet/default/buttonTest.js"> 
+  </script> -->
 
 </body>
 </html>
