@@ -21,21 +21,21 @@ Another alternative is to figure out an implementation with https://github.com/e
 
 For what I had done, the Java code in JSP templates were still useful for things like pulling out user permissions (as there was no default REST endpoint for that) and then exposing it as a JS object for React FE. 
 
-<sub>One final note about having bundling JS build step: It seems to be starting to be disliked ("only bundle cause you want to" and "avoid the npm dumpster fire")... some JS libraries are moving to being native es6 modules so that you can do things like jQuery again, just a simple `<script type=module>` on the template. I never got around to trying out PikaWeb but it sounds cool. Not sure if ReactJS will join that club soon. </sub>
+<sub><sup>One final note about having bundling JS build step: It seems to be starting to be disliked ("only bundle cause you want to" and "avoid the npm dumpster fire")... some JS libraries are moving to being native es6 modules so that you can do things like jQuery again, just a simple `<script type=module>` on the template. I never got around to trying out PikaWeb but it sounds cool. Not sure if ReactJS will join that club soon. </sup></sub>
 
 ## Getting Started
-#####To view the components with Sling Starter:
+##### To view the components with Sling Starter:
 - Get the Sling Starter app up and running
 - Clone this repository
 - Connect to WebDav and paste the contents of this repo's `slingWebDav/` folder into the root folder seen over WebDav. Overwrite as needed.
 
 Going to localhost:8080 should now give you the new homepage. Credentials are still `admin/admin` and `slingshot1/slingshot1`
 
-#####In order to create new user:
+##### In order to create new user:
 - http://localhost:8080/system/console/configMgr -> `admin/admin` -> `Apache Sling Create User` -> Check `Self-Registration enabled` and save
 If you don't do that, you'll always get the "error creating user" dialogue popup when trying to sign up.
 
-#####Development of FE:
+##### Development of FE:
 There are sufficient tutorials online but here is a brief overview:
 - Install a text editor for JS development. I personally use VSCode with plugins (described later). If a license can be obtained, IDEs such as WebStorm are also an option.
 - Install Node.js globally which is a JavaScript Runtime Environment. Instructions will be dependent on your operating system. 
