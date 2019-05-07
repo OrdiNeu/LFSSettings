@@ -29,7 +29,9 @@ For what I had done, the Java code in JSP templates were still useful for things
 - Clone this repository
 - Connect to WebDav and paste the contents of this repo's `slingWebDav/` folder into the root folder seen over WebDav. Overwrite as needed.
 
-Going to localhost:8080 should now give you the new homepage. Credentials are still `admin/admin` and `slingshot1/slingshot1`
+Going to localhost:8080 should now give you the new homepage. Credentials are still `admin/admin` and `slingshot1/slingshot1`. 
+
+If you are running OpenJDK11 and encounter an error while logging in, please install OpenJDK8 instead; [OpenJDK11 does not currently support the jrt:// protocol.](https://bugs.openjdk.java.net/browse/JDK-8209180).
 
 ##### In order to create new user:
 - http://localhost:8080/system/console/configMgr -> `admin/admin` -> `Apache Sling Create User` -> Check `Self-Registration enabled` and save
